@@ -1,15 +1,22 @@
 import { Composer } from "grammy";
+import type { Ctx } from "../bot.js";
+import { mainMenuKeyboard } from "../toolkit/index.js";
 
-// SCAFFOLD — generated from the bot blueprint BEFORE the agent runs.
-// Keep a LIVE registration (.command / .callbackQuery / …) so this feature is
-// never an empty stub. Replace the reply body with real logic + copy; if you
-// change the user-facing text, update tests/specs to match EXACTLY.
-// Do NOT rewrite src/bot.ts — buildBot() already auto-loads this module.
+const composer = new Composer<Ctx>();
 
-const composer = new Composer();
+const MSG_FR = "🔄 Conversation réinitialisée. Envoyez-moi un nouveau message ou choisissez une option.";
+const MSG_EN = "🔄 Conversation reset. Send me a new message or choose an option.";
 
 composer.command("restart", async (ctx) => {
-  await ctx.reply("Reset conversation context for current chat");
+  ctx.session.messageHistory = [];
+  ctx.session.lastResponse = undefined;
+  ctx.session.lastPrompt = undefined;
+  ctx.session.step = "idle";
+
+  const locale = ctx.session.locale ?? "fr";
+  await ctx.reply(locale === "fr" ? MSG_FR : MSG_EN, {
+    reply_markup: mainMenuKeyboard(),
+  });
 });
 
 export default composer;

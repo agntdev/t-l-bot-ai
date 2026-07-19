@@ -1,0 +1,50 @@
+[
+  {
+    "name": "settings shows current preferences",
+    "steps": [
+      {
+        "send": { "callback": "settings:show" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": {
+              "text": "⚙️ Vos paramètres\n\nLangue : 🇫🇷 Français\nStyle : Équilibré"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "settings language selection",
+    "steps": [
+      {
+        "send": { "callback": "settings:lang" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": {
+              "text": "🌐 Choisissez votre langue :"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "settings style selection",
+    "steps": [
+      {
+        "send": { "callback": "settings:style" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": {
+              "text": "📝 Choisissez la longueur des réponses :"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

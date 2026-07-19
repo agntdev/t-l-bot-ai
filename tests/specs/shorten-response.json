@@ -1,19 +1,17 @@
 [
   {
-    "name": "Raccourcir",
+    "name": "Raccourcir shows empty state when no last response",
     "steps": [
       {
+        "send": { "callback": "shorten_response" },
         "expect": [
           {
             "method": "sendMessage",
             "payload": {
-              "text": "Request condensed version of last response"
+              "text": "📝 Aucune réponse à raccourcir. Posez-moi d'abord une question."
             }
           }
-        ],
-        "send": {
-          "callback": "shorten_response"
-        }
+        ]
       }
     ]
   }

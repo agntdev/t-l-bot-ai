@@ -1,19 +1,17 @@
 [
   {
-    "name": "/summary",
+    "name": "/summary shows empty state when no history",
     "steps": [
       {
+        "send": { "text": "/summary" },
         "expect": [
           {
             "method": "sendMessage",
             "payload": {
-              "text": "Generate summary of current conversation thread"
+              "text": "📝 Aucune conversation à résumer. Commencez par m'envoyer un message."
             }
           }
-        ],
-        "send": {
-          "text": "/summary"
-        }
+        ]
       }
     ]
   }

@@ -1,0 +1,50 @@
+[
+  {
+    "name": "chat responds to greeting",
+    "steps": [
+      {
+        "send": { "text": "Bonjour" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "Bonjour ! Comment puis-je vous aider aujourd'hui ?"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "chat responds to thanks",
+    "steps": [
+      {
+        "send": { "text": "Merci" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "Avec plaisir ! N'hésitez pas si vous avez d'autres questions."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "chat filters abusive content",
+    "steps": [
+      {
+        "send": { "text": "merde" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "Ce message contient du langage inapproprié. Veuillez reformuler votre demande."
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
