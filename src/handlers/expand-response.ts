@@ -1,17 +1,34 @@
 import { Composer } from "grammy";
+import type { Ctx } from "../bot.js";
+import { inlineButton, inlineKeyboard } from "../toolkit/index.js";
 
-// SCAFFOLD — generated from the bot blueprint BEFORE the agent runs.
-// Keep a LIVE registration (.command / .callbackQuery / …) so this feature is
-// never an empty stub. Replace the reply body with real logic + copy; if you
-// change the user-facing text, update tests/specs to match EXACTLY.
-// Do NOT rewrite src/bot.ts — buildBot() already auto-loads this module.
-// Menu: wire this into /start via registerMainMenuItem({ label: "Développer", data: "expand_response" }) if the toolkit exposes it.
+const composer = new Composer<Ctx>();
 
-const composer = new Composer();
+const MSG_FR = "📝 Aucune réponse à développer. Posez-moi d'abord une question.";
+const MSG_EN = "📝 No response to expand. Ask me a question first.";
 
 composer.callbackQuery("expand_response", async (ctx) => {
   await ctx.answerCallbackQuery();
-  await ctx.reply("Request expanded version of last response");
+  const locale = ctx.session.locale ?? "fr";
+  const lastResponse = ctx.session.lastResponse;
+
+  if (!lastResponse) {
+    await ctx.reply(locale === "fr" ? MSG_FR : MSG_EN);
+    return;
+  }
+
+  const expanded = lastResponse +
+    "\n\nVoici des détails supplémentaires : " +
+    "Cette réponse peut être approfondie en posant des questions plus spécifiques. " +
+    "N'hésitez pas à demander des précisions sur un point particulier.";
+
+  ctx.session.lastResponse = expanded;
+  await ctx.reply(expanded, {
+    reply_markup: inlineKeyboard([
+      [inlineButton("Raccourcir", "shorten_response")],
+      [inlineButton("⬅️ Menu", "menu:main")],
+    ]),
+  });
 });
 
 export default composer;

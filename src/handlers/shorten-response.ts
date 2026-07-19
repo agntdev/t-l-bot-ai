@@ -1,17 +1,36 @@
 import { Composer } from "grammy";
+import type { Ctx } from "../bot.js";
+import { inlineButton, inlineKeyboard } from "../toolkit/index.js";
 
-// SCAFFOLD — generated from the bot blueprint BEFORE the agent runs.
-// Keep a LIVE registration (.command / .callbackQuery / …) so this feature is
-// never an empty stub. Replace the reply body with real logic + copy; if you
-// change the user-facing text, update tests/specs to match EXACTLY.
-// Do NOT rewrite src/bot.ts — buildBot() already auto-loads this module.
-// Menu: wire this into /start via registerMainMenuItem({ label: "Raccourcir", data: "shorten_response" }) if the toolkit exposes it.
+const composer = new Composer<Ctx>();
 
-const composer = new Composer();
+const MSG_FR = "📝 Aucune réponse à raccourcir. Posez-moi d'abord une question.";
+const MSG_EN = "📝 No response to shorten. Ask me a question first.";
+
+function shorten(text: string): string {
+  const sentences = text.split(/[.!?]+/).filter((s) => s.trim());
+  if (sentences.length <= 1) return text;
+  return sentences[0].trim() + ".";
+}
 
 composer.callbackQuery("shorten_response", async (ctx) => {
   await ctx.answerCallbackQuery();
-  await ctx.reply("Request condensed version of last response");
+  const locale = ctx.session.locale ?? "fr";
+  const lastResponse = ctx.session.lastResponse;
+
+  if (!lastResponse) {
+    await ctx.reply(locale === "fr" ? MSG_FR : MSG_EN);
+    return;
+  }
+
+  const shortened = shorten(lastResponse);
+  ctx.session.lastResponse = shortened;
+  await ctx.reply(shortened, {
+    reply_markup: inlineKeyboard([
+      [inlineButton("Développer", "expand_response")],
+      [inlineButton("⬅️ Menu", "menu:main")],
+    ]),
+  });
 });
 
 export default composer;

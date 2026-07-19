@@ -1,19 +1,17 @@
 [
   {
-    "name": "Développer",
+    "name": "Développer shows empty state when no last response",
     "steps": [
       {
+        "send": { "callback": "expand_response" },
         "expect": [
           {
             "method": "sendMessage",
             "payload": {
-              "text": "Request expanded version of last response"
+              "text": "📝 Aucune réponse à développer. Posez-moi d'abord une question."
             }
           }
-        ],
-        "send": {
-          "callback": "expand_response"
-        }
+        ]
       }
     ]
   }

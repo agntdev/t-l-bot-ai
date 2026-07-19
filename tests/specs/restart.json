@@ -1,19 +1,17 @@
 [
   {
-    "name": "/restart",
+    "name": "/restart resets conversation context",
     "steps": [
       {
+        "send": { "text": "/restart" },
         "expect": [
           {
             "method": "sendMessage",
             "payload": {
-              "text": "Reset conversation context for current chat"
+              "text": "🔄 Conversation réinitialisée. Envoyez-moi un nouveau message ou choisissez une option."
             }
           }
-        ],
-        "send": {
-          "text": "/restart"
-        }
+        ]
       }
     ]
   }
